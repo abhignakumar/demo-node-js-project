@@ -22,4 +22,19 @@ describe('User API', () => {
         expect(res.status).toBe(200);
         expect(res.body.name).toBe('Alice');
     });
+
+    test('PUT /users/:id/age should update age correctly', async () => {
+        const res = await request(app)
+            .put('/users/1/age')
+            .send({ age: 26 });
+        expect(res.status).toBe(200);
+        expect(res.body.age).toBe(26);
+    });
+
+    test('DELETE /users/:id should remove a user', async () => {
+        await request(app).delete('/users/2');
+        const res = await request(app).get('/users');
+        const userIds = res.body.map((u: any) => u.id);
+        expect(userIds).not.toContain(2);
+    });
 });
