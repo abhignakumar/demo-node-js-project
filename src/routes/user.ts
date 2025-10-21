@@ -32,4 +32,21 @@ router.post('/', (req: Request, res: Response) => {
     res.status(201).json(newUser);
 });
 
+router.put('/:id/age', (req: Request, res: Response) => {
+    const id = parseInt(req.params.id, 10);
+    const { age } = req.body as { age: number };
+    const user = users.find(u => u.id === id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    user.age = age;
+    res.json(user);
+});
+
+router.delete('/:id', (req: Request, res: Response) => {
+    const id = parseInt(req.params.id, 10);
+    const user = users.find(u => u.id === id);
+    if (!user) return res.status(404).json({ error: 'User not found' });
+    users = users.filter(u => u.id !== id);
+    res.json({ message: 'User deleted' });
+});
+
 export default router;
